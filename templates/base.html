@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" href="{%  static 'bootstrap_5_1_3/css/bootstrap.min.css' %}">
+
+    <title>높은뜻 광성교회 청년마을 Crew</title>
+    {% block extra-style %}
+    {% endblock %}
+</head>
+<body style="padding-top:90px">
+    {% include 'navbar.html' %}
+    <div class="container my-3">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block footer %}
+    {% endblock %}
+
+    <script src="{% static 'bootstrap_5_1_3/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'jquery-3.6.0.min.js' %}"></script>
+    {% block extra-script %}
+    {% endblock %}
+
+</body>
+</html>

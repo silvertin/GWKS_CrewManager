@@ -1,0 +1,86 @@
+
+{% extends 'base.html' %}
+{% load Crew_filter %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="my-3">
+            <a href="{% url 'crew:new' %}" class="create btn btn-sm btn-outline-secondary">추가</a>
+        </div>
+    {% endif %}
+
+<table class="table">
+    <thead class="table-light">
+        <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>크루매니저</th>
+            <th>멤버인원현황</th>
+            <th>생성날짜</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if page_obj %}
+    {% for crew in page_obj %}
+    <tr>
+        <td>
+            {{ page_obj.paginator.count|sub:page_obj.start_index|sub:forloop.counter0|add:1 }}
+        </td>
+        <td>
+            <a href="{% url 'crew:detail' crew.id %}">{{ crew.name }}</a>
+        </td>
+        <td>
+            {{ crew.manager.name }}
+        </td>
+        <td>
+            {{ crew.members.count }} / {{ crew.member_limit }}
+        </td>
+        <td>
+            {{ crew.create_date }}
+        </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="3">등록된 크루가 없습니다.</td>
+    </tr>
+    {% endif %}
+    </tbody>
+</table>
+<ul class="pagination justify-content-center">
+{% if page_obj.has_previous %}
+<li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a>
+</li>
+{% else %}
+<li class="page-item disabled">
+    <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+</li>
+{% endif %}
+{% for page_number in page_obj.paginator.page_range %}
+    {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
+        {%  if page_number == page_obj.number %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% if page_obj.has_next %}
+<li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a>
+</li>
+{% else %}
+<li class="page-item disabled">
+    <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+</li>
+{% endif %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+{%  endblock %}
