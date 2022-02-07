@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 # from django.contrib.auth.models import User
@@ -29,7 +30,7 @@ class Crew(models.Model):
 
     members = models.ManyToManyField(User,related_name='members')
 
-    member_limit = models.PositiveSmallIntegerField("최대 모임 인원",default=5, help_text="5~15명 이내로 설정해주세요")
+    member_limit = models.PositiveSmallIntegerField("최대 모임 인원",default=5, help_text="5~15명 이내로 설정해주세요", validators=[MinValueValidator(5), MaxValueValidator(15)])
 
 
     class Meta:

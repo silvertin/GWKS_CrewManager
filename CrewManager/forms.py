@@ -11,5 +11,5 @@ class CrewForm(forms.ModelForm):
             'name' : forms.TextInput(attrs={'class':'form-control'}),
             'description' : forms.Textarea(attrs={'class':'form-control', 'rows':10}),
             'meeting_time' : forms.TextInput(attrs={'class' : 'form-control'}),
-            'member_limit' : forms.IntegerField(validators=[MinValueValidator(5), MaxValueValidator(15)])
+            'member_limit' : forms.NumberInput()
         }
