@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from common.views import ManagerOnlyMixin
+from accounts.views import ManagerOnlyMixin
 
 from CrewManager.models import Crew
 from CrewManager.forms import CrewForm

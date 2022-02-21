@@ -2,7 +2,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 # from django.contrib.auth.models import User
-from common.models import User
+from accounts.models import User
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.

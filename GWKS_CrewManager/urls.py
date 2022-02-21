@@ -23,7 +23,17 @@ from GWKS_CrewManager import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('common/', include(('common.urls','common'),namespace='common')),
+
+    path('accounts/', include(('accounts.urls','accounts'),namespace='accounts')),
+    path('accounts/', include('allauth.urls')),
+
     path('crew/', include(('CrewManager.urls','crew'),namespace='crew')),
-    path('', IndexView.as_view(), name='index')
+
+    path('', IndexView.as_view(), name='index'),
+
+
+    path('zoom/', include('zoom.urls')),
+
+
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_URL)
