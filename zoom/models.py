@@ -111,6 +111,9 @@ class ZoomAccount(models.Model):
     secretkey = models.CharField('비밀 키', max_length=60)
     useremail = models.EmailField('사용자 이메일')
 
+    def __str__(self):
+        return self.name
+
 class ZoomMeeting(models.Model):
     meetingid = models.IntegerField('id', default=0)
     topic = models.CharField('모임 주제',max_length=60)
@@ -124,4 +127,7 @@ class ZoomMeeting(models.Model):
     account = models.ForeignKey(ZoomAccount, on_delete=models.PROTECT, blank=True, null=True, verbose_name='줌 계정', related_name='account')
     user = models.ForeignKey(User, verbose_name='사용자', on_delete=models.PROTECT, blank=True, null=True)
     settings = JSONField(schema=SETTINGS_SCHEMA,null=True, blank=True)
+
+    def __str__(self):
+        return self.topic
 

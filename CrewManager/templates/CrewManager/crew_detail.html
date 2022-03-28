@@ -7,7 +7,7 @@
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line">
                 <a> 이름 : {{ object.name }}</a>
-                <a> 소개 : {{ object.description }}</a>
+                <a> 소개 : {{ object.description|safe }}</a>
                 <a> 생성날짜 : {{ object.create_date }}</a>
                 <a> 모임형태 : {{ object.meeting_type }}</a>
                 <a> 모임시간 : {{ object.meeting_time }}</a>

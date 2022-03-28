@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 
 class UserManager(BaseUserManager):
@@ -48,6 +50,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     created_date = models.DateTimeField('등록일자', auto_now_add=True)
     updated_date = models.DateTimeField('수정일자', auto_now=True)
+
+    profile_image = ProcessedImageField(
+        blank=True,
+        upload_to='profile_image/%Y/%m',
+        processors=[ResizeToFill(300,300)],
+        format='JPEG',
+        options={'quality':70},
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']

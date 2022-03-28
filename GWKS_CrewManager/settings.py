@@ -60,8 +60,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.naver',
 
     'django_jsonform',
-    'rest_framework'
-
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'imagekit',
+    'ckeditor',
+    'ckeditor_uploader',
 
 ]
 
@@ -168,7 +173,25 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 SOCIALACCOUNT_AUTO_SIGNUP = False
 ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.SignupForm'
 
+ACCOUNT_UNIQUE_EMAIL = True
+
 
 #세션 주기 설정 20분
 SESSION_COOKIE_AGE = 1200
 SESSION_SAVE_EVERY_REQUEST = True
+ACCOUNT_SESSION_REMEMBER = True
+
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER' : 'accounts.serializers.UserSerializer'
+}
+
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = 'pillow'

@@ -4,6 +4,7 @@ from django.utils import timezone
 # from django.contrib.auth.models import User
 from accounts.models import User
 from django.utils.translation import gettext_lazy as _
+from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
 class Crew(models.Model):
@@ -20,7 +21,7 @@ class Crew(models.Model):
         MARRIED = '신혼브릿지', _('신혼브릿지')
 
     name = models.CharField('크루명', max_length=30)
-    description = models.TextField('한줄소개')
+    description = RichTextUploadingField('크루 설명',blank=True, null=True)
     create_date = models.DateTimeField('크루 생성날짜', default=timezone.now)
     meeting_type = models.CharField('모임형태',max_length=6, choices=MeetingType.choices, default=MeetingType.ON_OFFLINE)
     meeting_time = models.CharField('모임시간',max_length=20)

@@ -7,12 +7,12 @@ from .models import User
 class CrewUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         models = get_user_model()
-        fields = ['email','name','password1','password2','birthyear', 'community']
+        fields = ['email','name','password1','password2','birthyear', 'community','profile_image']
         widgets = {
             'email' : forms.EmailInput(attrs={'class':'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'birthyear': forms.NumberInput(attrs={'class': 'form-control'}),
-            'community': forms.Select(attrs={'class': 'form-control'})
+            'community': forms.Select(attrs={'class': 'form-control'}),
         }
 
 

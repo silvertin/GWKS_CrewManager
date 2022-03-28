@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from accounts.views import UserCreateView, UserCreateDoneTV, UserLogout, UserLoginView
 
@@ -13,5 +13,6 @@ urlpatterns = [
     path('register/', UserCreateView.as_view(), name='register'),
     path('register/done/', UserCreateDoneTV.as_view(), name='register_done'),
 
-
+    path('api/',include('dj_rest_auth.urls')),
+    path('api/registration',include('dj_rest_auth.registration.urls')),
 ]
