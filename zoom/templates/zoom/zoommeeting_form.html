@@ -1,0 +1,19 @@
+<h5 class="my-3 border-bottom pb-2">미팅 생성</h5>
+    <div class="card my-3">
+        <div class="card-body">
+            <form method="post" class="post-form my-3" id="post-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">등록</button>
+            </form>
+        </div>
+</div>
+
+<script type="text/javascript">
+
+    $("#post-form").on('submit'), function(event){
+    event.preventDefault();
+    console.log("a");
+    });
+
+</script>

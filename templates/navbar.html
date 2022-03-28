@@ -17,7 +17,7 @@
                 {% if user.is_authenticated %}
 
                     <li class="nav-item">
-                    <a class="nav-link" href="{% url 'zoom:index' %}">줌 예약</a>
+                    <a class="nav-link" href="{% url 'zoom:meetinglist' %}">줌 예약</a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:logout' %}">{{ user.username }} (로그아웃)</a>

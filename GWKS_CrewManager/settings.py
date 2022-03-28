@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ncod4h=lz2p(ii!#^&=a1jn!a^!u^e5ulkgz+zklo#n8trr+s%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost' , '127.0.0.1']
+ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL='accounts.User'
 
@@ -58,6 +58,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',
     'allauth.socialaccount.providers.instagram',
     'allauth.socialaccount.providers.naver',
+
+    'django_jsonform',
+    'rest_framework'
+
 
 ]
 
@@ -134,7 +138,7 @@ TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -161,4 +165,10 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+SOCIALACCOUNT_AUTO_SIGNUP = False
+ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.SignupForm'
 
+
+#세션 주기 설정 20분
+SESSION_COOKIE_AGE = 1200
+SESSION_SAVE_EVERY_REQUEST = True

@@ -32,7 +32,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
 
 
-    path('zoom/', include('zoom.urls')),
+    path('zoom/', include(('zoom.urls'),namespace='zoom')),
 
 
 

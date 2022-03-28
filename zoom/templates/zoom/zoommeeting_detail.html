@@ -1,0 +1,20 @@
+<div class="card-text" style="white-space: pre-line">
+    <a> 미팅 ID : {{ object.meetingid }}</a>
+    <a> 모임 주제 : {{ object.topic }}</a>
+    <a> 모임 설명 : {{ object.description }}</a>
+    <a> 모임 타입 : {{ object.type_meeting }}</a>
+    <a> 등록날짜 : {{ object.create_dt }}</a>
+    <a> 시작시간 : {{ object.start_dt }}</a>
+    <a> 진행시간 : {{ object.duration }}분</a>
+    <a> 비밀번호: {{ object.password }}</a>
+    <a> 모임 URL : {{ object.join_url }}</a>
+    <a> 줌계정 : {{ object.account.name }} ({{ object.account.useremail }})</a>
+    <a> 사용자 : {{ object.user.name }} ({{ object.user.email }})</a>
+</div>
+{% if user.id == object.user.id  %}
+    <a href="{% url 'zoom:meetingdelete' pk=object.id %}" class="delete btn btn-sm btn-outline-secondary">삭제</a>
+    <a href="{% url 'zoom:meetingupdate' pk=object.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+{% endif %}
+
+
+

@@ -27,7 +27,7 @@ class ManagerOnlyMixin(AccessMixin):
 class UserLoginView(FormView):
     form_class = CrewUserLoginForm
     template_name = 'accounts/login.html'
-    success_url = reverse_lazy('crew:list')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         credentials = form.cleaned_data
@@ -45,7 +45,7 @@ class UserLoginView(FormView):
 
 def UserLogout(request):
     logout(request)
-    return HttpResponseRedirect(reverse_lazy('crew:list'))
+    return HttpResponseRedirect(reverse_lazy('index'))
 
 class UserCreateView(CreateView):
     template_name = 'accounts/register.html'

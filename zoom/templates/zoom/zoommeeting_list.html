@@ -1,0 +1,226 @@
+
+{%  extends 'base.html' %}
+{% block extra-style %}
+    {% load static %}
+
+    <script src="{% static 'moment.js' %}"></script>
+    <script src="{% static 'Snap.svg-0.5.1/dist/snap.svg.js' %}"></script>
+
+    <script src={%  static 'frappe_gantt/gantt/dist/frappe-gantt.js' %}></script>
+    <link rel="stylesheet" href="{%  static 'frappe_gantt/gantt/dist/frappe-gantt.css' %}">
+
+    <script src={%  static 'datepicker/bootstrap-datepicker/dist/js/bootstrap-datepicker.js' %}></script>
+    <link rel="stylesheet" href="{%  static 'datepicker/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.css' %}">
+
+    <script src={% static 'django_jsonform/vendor/react.production.min.js' %}></script>
+    <script src={% static 'django_jsonform/vendor/react-dom.production.min.js' %}></script>
+    <script src={% static 'django_jsonform/react-json-form.min.js' %}></script>
+{% endblock %}
+{% block content %}
+
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <a id="meetingnew" class="create btn btn-sm btn-outline-secondary">미팅 생성</a>
+            </div>
+            <div>
+                <div id="datepicker" style="float:left">
+                    <input type="hidden" id="selected_date">
+                </div>
+                <div>
+                    <svg id="gantt"></svg>
+                </div>
+            </div>
+
+        </div>
+	</div>
+    <div class="card">
+        <div class="card-body">
+            <div id="detail">
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+<footer class="fixed-bottom bg-info">
+</footer>
+{% endblock %}
+
+{% block extra-script %}
+    <script>
+
+
+    let today = new Date();
+    let tasks = [
+        {% load zoom_tags %}
+        {% for zm in object_list %}
+            {% same_today zm.start_dt as ret %}
+            {% if ret %}
+            {
+                id : "{{ zm.meetingid }}",
+                name : "{{ zm.topic }}",
+                start: "{{ zm.start_dt|date:"Y-m-d H:i"}}",
+                end: "{{ zm.start_dt|add_hour:zm.duration|date:"Y-m-d H:i"}}",
+                progress : 100,
+                readonly : true,
+                pk : {{ zm.id }},
+
+            },
+            {%  endif %}
+        {% endfor %}
+
+    ]
+
+    var options = {
+            header_height: 50,
+            column_width: 30,
+            step: 24,
+            bar_height: 20,
+            bar_corner_radius: 3,
+            arrow_curve: 5,
+            padding: 18,
+            view_mode: 'Hour',
+            date_format: 'YYYY-MM-DD',
+            popup_trigger: 'click',
+            custom_popup_html: null,
+            language: 'ko',
+            on_click: function (task)
+            {
+                $.ajax({
+                    url : task.pk,
+            headers : {
+                'X-CSRFTOKEN' : '{{ csrf_token }}'
+            },
+            type : 'GET',
+            success:function(data){
+                $('#detail').html(data);
+            },
+            error: function() {
+                $('#detail').html();
+                }
+            })
+            }
+        };
+
+
+
+    if (tasks.length === 0)
+    {
+        tasks.push(
+            {
+            id : 'bundle',
+            name : " ",
+            start: today.toISOString().substring(0,10)+ " 00:00",
+            end: today.toISOString().substring(0,10)+ " 01:00",
+            progress : 100,
+            readonly : true,
+        }
+        )
+        var gantt = new Gantt("#gantt", tasks, options);
+        $(".bar-wrapper[data-id='bundle']").remove(); // remove bar made by sample data
+    }
+    else
+    {
+        var gantt = new Gantt("#gantt", tasks, options);
+    }
+
+
+
+    $('#datepicker').datepicker({
+    language: "ko",
+    todayHighlight: true
+    });
+
+
+    $('#datepicker').on('changeDate', function() {
+        let date = new Date($('#datepicker').datepicker('getFormattedDate'));
+        tasks = []
+        $.ajax({
+            url : '{% url "zoom:meetinglistupdate" %}',
+            headers : {
+                'X-CSRFTOKEN' : '{{ csrf_token }}'
+            },
+            type : 'GET',
+            data : date.toISOString(),
+            success:function(data){
+
+                for (const item of data)
+                {
+                    tasks.push(
+                        {
+                            id : item.id+"",
+                            name : item.name,
+                            start : item.start,
+                            end : item.end,
+                            progress : 100,
+                            readonly : true,
+                            pk : item.pk,
+                        }
+                    )
+                }
+                if (tasks.length === 0)
+                {
+                    tasks.push(
+                        {
+                        id : 'bundle',
+                        name : " ",
+                        start: date.toISOString().substring(0,10)+ " 00:00",
+                        end: date.toISOString().substring(0,10)+ " 01:00",
+                        progress : 100,
+                        readonly : true,
+                        }
+                    )
+                    gantt.refresh(tasks);
+                    $(".bar-wrapper[data-id='bundle']").remove(); // remove bar made by sample data
+                }
+                else
+                {
+                    gantt.refresh(tasks);
+                }
+            },
+            error: function() {
+                tasks.push(
+                {
+                    id : 'bundle',
+                    name : " ",
+                    start: date.toISOString().substring(0,10)+ " 00:00",
+                    end: date.toISOString().substring(0,10)+ " 01:00",
+                    progress : 100,
+                    readonly : true,
+                });
+                gantt.refresh(tasks);
+                $(".bar-wrapper[data-id='bundle']").remove(); // remove bar made by sample data
+                alert('error');
+            }
+        });
+    });
+
+    $('#meetingnew').on('click',function()
+        {
+            $.ajax({
+                    url : 'new',
+            headers : {
+                'X-CSRFTOKEN' : '{{ csrf_token }}'
+            },
+            type : 'GET',
+            success:function(data){
+                $('#detail').html(data);
+                let renewURL = location.href;
+                if (!renewURL.endsWith('new')) {
+                    renewURL += 'new'
+                    history.pushState(null, null, renewURL)
+                }
+            },
+            error: function() {
+                $('#detail').html();
+
+                }
+            });
+        });
+
+    </script>
+
+{% endblock %}

@@ -9,12 +9,12 @@ from accounts.models import User
 
 # Register your models here.
 class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label="비밀번호", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="비밀번호 확인", widget=forms.PasswordInput)
+    password1 = forms.CharField(label="비밀번호", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(label="비밀번호 확인", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
-        fields = ('email', 'name')
+        fields = ('email', 'name', 'birthyear', 'community')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -34,7 +34,7 @@ class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     class Meta:
         model = User
-        fields = ('email', 'password', 'name', 'is_active', 'is_admin')
+        fields = ('email', 'password', 'name', 'is_active', 'is_admin', 'birthyear', 'community')
 
 class UserAdmin(BaseUserAdmin):
    # The forms to add and change user instances
@@ -44,11 +44,11 @@ class UserAdmin(BaseUserAdmin):
    # The fields to be used in displaying the User model.
    # These override the definitions on the base UserAdmin
    # that reference specific fields on auth.User.
-   list_display = ('email', 'name', 'is_admin')
+   list_display = ('email', 'name', 'is_admin', 'birthyear','community')
    list_filter = ('is_admin',)
    fieldsets = (
        (None, {'fields': ('email', 'password')}),
-       ('Personal info', {'fields': ('name',)}),
+       ('Personal info', {'fields': ('name', 'birthyear','community')}),
        ('Permissions', {'fields': ('is_admin',)}),
    )
    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -56,7 +56,7 @@ class UserAdmin(BaseUserAdmin):
    add_fieldsets = (
        (None, {
            'classes': ('wide',),
-           'fields': ('email', 'name', 'password1', 'password2'),
+           'fields': ('email', 'name', 'password1', 'password2', 'birthyear', 'community'),
        }),
    )
    search_fields = ('email',)
