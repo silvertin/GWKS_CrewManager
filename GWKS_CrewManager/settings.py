@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'CrewManager',
     'accounts',
     'zoom',
+    'apis',
 
     # oauth
     'allauth',
@@ -67,6 +68,7 @@ INSTALLED_APPS = [
     'imagekit',
     'ckeditor',
     'ckeditor_uploader',
+    'corsheaders',
 
 ]
 
@@ -80,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'GWKS_CrewManager.urls'
@@ -215,3 +218,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
