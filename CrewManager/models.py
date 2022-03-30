@@ -6,6 +6,9 @@ from accounts.models import User
 from django.utils.translation import gettext_lazy as _
 from ckeditor_uploader.fields import RichTextUploadingField
 
+from imagekit.models import ProcessedImageField, ImageSpecField
+from imagekit.processors import ResizeToFit
+
 # Create your models here.
 class Crew(models.Model):
 
@@ -32,7 +35,12 @@ class Crew(models.Model):
     members = models.ManyToManyField(User,related_name='members')
 
     member_limit = models.PositiveSmallIntegerField("최대 모임 인원",default=5, help_text="5~15명 이내로 설정해주세요", validators=[MinValueValidator(5), MaxValueValidator(15)])
-
+    image = ProcessedImageField(verbose_name='소개이미지',upload_to='crew/resize/%y%m%d',
+                              processors=[ResizeToFit(width=900,height=900,upscale=False)],
+                              format='JPEG', null=True, blank=True)
+    image_thumbnail = ImageSpecField(source='image', processors=[ResizeToFit(width=300,height=300,upscale=False)],
+                                                                 format='JPEG',
+                                     options={'quality':60})
 
     class Meta:
         ordering = ['-id']

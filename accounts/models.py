@@ -51,13 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_date = models.DateTimeField('등록일자', auto_now_add=True)
     updated_date = models.DateTimeField('수정일자', auto_now=True)
 
-    profile_image = ProcessedImageField(
-        blank=True,
-        upload_to='profile_image/%Y/%m',
-        processors=[ResizeToFill(300,300)],
-        format='JPEG',
-        options={'quality':70},
-    )
+    profile_image = models.URLField('프로파일이미지URL', null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']

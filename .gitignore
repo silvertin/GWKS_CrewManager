@@ -18,3 +18,5 @@ GWKS_CrewManager/__pycache__/
 zoom/templatetags/__pycache__/
 
 zoom/migrations/__pycache__/
+
+apis/__pycache__/

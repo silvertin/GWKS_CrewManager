@@ -33,7 +33,8 @@ urlpatterns = [
 
 
     path('zoom/', include(('zoom.urls'),namespace='zoom')),
-    re_path('^ckeditor/', include('ckeditor_uploader.urls'))
+    re_path('^ckeditor/', include('ckeditor_uploader.urls')),
+    path('apis/', include(('apis.urls'),namespace='apis')),
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_URL) \

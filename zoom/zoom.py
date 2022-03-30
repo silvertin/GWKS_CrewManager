@@ -19,7 +19,7 @@ class Zoom(ZoomMeetings):
         required_date_format = date
         url = 'https://api.zoom.us/v2/users/' + self.email + '/meetings'
         params = {"type": "upcoming", "page_size": 100}
-        header = {'authorization': 'Bearer ' + self.request_token}
+        header = {'authorization': 'Bearer ' + self.request_token.decode()}
         zoom_create_meeting = requests.get(url, params=params, headers=header)
         return json.loads(zoom_create_meeting.text)
 

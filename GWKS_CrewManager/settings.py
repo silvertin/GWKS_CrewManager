@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-
+import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -183,9 +183,29 @@ ACCOUNT_SESSION_REMEMBER = True
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",
+    'DEFAULT_PERMISSION_CLASSES' : [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ],
+}
+JWT_AUTH = {
+        #JWT의 비밀키 (secret key)로 어떤 걸 사용할지
+        'JWT_SECRET_KEY': SECRET_KEY,
+
+    #JWT 암호화에 사용되는 알고리즘 지정
+    'JWT_ALGORITHM': 'HS256',
+
+    #JWT 토큰을 갱신 가능한지에 대한 여부
+    'JWT_ALLOW_REFRESH': True,
+    # JWT 토큰의 유효기간 설정
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+
+    # JWT 토큰 갱신의 유효기간
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
