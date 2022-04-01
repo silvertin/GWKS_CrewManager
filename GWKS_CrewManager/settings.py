@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.naver',
 
     'django_jsonform',
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
