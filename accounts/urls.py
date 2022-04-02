@@ -13,6 +13,5 @@ urlpatterns = [
     path('register/', UserCreateView.as_view(), name='register'),
     path('register/done/', UserCreateDoneTV.as_view(), name='register_done'),
 
-    path('api/',include('dj_rest_auth.urls')),
-    path('api/registration',include('dj_rest_auth.registration.urls')),
+
 ]

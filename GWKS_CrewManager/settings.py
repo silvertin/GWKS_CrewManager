@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import datetime
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'imagekit',
@@ -191,25 +193,17 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
 }
-JWT_AUTH = {
-        #JWT의 비밀키 (secret key)로 어떤 걸 사용할지
-        'JWT_SECRET_KEY': SECRET_KEY,
+REST_USE_JWT = True
 
-    #JWT 암호화에 사용되는 알고리즘 지정
-    'JWT_ALGORITHM': 'HS256',
-
-    #JWT 토큰을 갱신 가능한지에 대한 여부
-    'JWT_ALLOW_REFRESH': True,
-    # JWT 토큰의 유효기간 설정
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-
-    # JWT 토큰 갱신의 유효기간
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+SIMPLE_JWT= {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
