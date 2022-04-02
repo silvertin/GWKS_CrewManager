@@ -81,9 +81,28 @@ class Kakao_Login(APIView):
                     "user": {
                         "pk": user.id,
                         "email": user.email
-                    }
+                    },
+                    "status" : "exist"
                     }
 
+
+            return JsonResponse(info)
+        else:
+            User(
+                email=kakao_response['kakao_account']['email'],
+                profile_image=['profile_image']
+            ).save()
+            user = User.objects.get(email=kakao_response['kakao_account']['email'])
+            accesstoken, refreshtoken = dj_rest_auth.utils.jwt_encode(user)
+
+            info = {"access_token": f"{accesstoken}",
+                    "refresh_token": f"{refreshtoken}",
+                    "user": {
+                        "pk": user.id,
+                        "email": user.email
+                    },
+                    "status": "new"
+                    }
 
             return JsonResponse(info)
         # else:
