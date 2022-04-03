@@ -24,6 +24,7 @@ class Crew(models.Model):
         MARRIED = '신혼브릿지', _('신혼브릿지')
 
     name = models.CharField('크루명', max_length=30)
+    abstract = models.CharField('크루한줄설명', max_length=100)
     description = RichTextUploadingField('크루 설명',blank=True, null=True)
     create_date = models.DateTimeField('크루 생성날짜', default=timezone.now)
     meeting_type = models.CharField('모임형태',max_length=6, choices=MeetingType.choices, default=MeetingType.ON_OFFLINE)
