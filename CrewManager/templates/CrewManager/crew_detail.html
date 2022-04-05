@@ -16,9 +16,11 @@
                 <a> 크루 소속 공동체 : {{ object.community }}</a>
                 <a> 크루 매니저 : {{ crew.manager.name }}</a>
                 <a> 크루 멤버 : {% for member in crew.members.all %} {{ member.name }} {% endfor %}</a>
-                <a> 크루 멤버수 : {{ crew.members.count }} / {{ crew.member_limit }}</a>
+                <a> 최대모임인원 (본인 포함) : {{ crew.members.count }} / {{ crew.member_limit }}</a>
                 <a> 크루 소개 사진 :</a>
-                <img src="{{ crew.image.url }}"></img>
+                {% if crew.image %}
+                    <img src="{{ crew.image.url }}"></img>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -28,16 +28,16 @@ class Crew(models.Model):
     description = RichTextUploadingField('크루 설명',blank=True, null=True)
     create_date = models.DateTimeField('크루 생성날짜', default=timezone.now)
     meeting_type = models.CharField('모임형태',max_length=6, choices=MeetingType.choices, default=MeetingType.ON_OFFLINE)
-    meeting_time = models.CharField('모임시간',max_length=30)
-    meeting_limit = models.CharField('모임제한',max_length=30)
+    meeting_time = models.CharField('모임시간 (30자 이내)',max_length=30)
+    meeting_limit = models.CharField('모임제한 (30자 이내)',max_length=30)
     community = models.CharField('크루 소속 공동체',max_length=6, choices=CommunityType.choices, default=CommunityType.FIRST)
 
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='크루매니저', related_name='manager')
 
     members = models.ManyToManyField(User,related_name='members')
 
-    member_limit = models.PositiveSmallIntegerField("최대 모임 인원",default=5, help_text="5~15명 이내로 설정해주세요", validators=[MinValueValidator(5), MaxValueValidator(15)])
-    image = ProcessedImageField(verbose_name='소개이미지',upload_to='crew/resize/%y%m%d',
+    member_limit = models.PositiveSmallIntegerField("최대 모임 인원 (본인 포함)",default=5, help_text="5~15명 이내로 설정해주세요", validators=[MinValueValidator(5), MaxValueValidator(15)])
+    image = ProcessedImageField(verbose_name='크루 소개 이미지 (정사각형)',upload_to='crew/resize/%y%m%d',
                               processors=[ResizeToFit(width=900,height=900,upscale=False)],
                               format='JPEG', null=True, blank=True)
     image_thumbnail = ImageSpecField(source='image', processors=[ResizeToFit(width=300,height=300,upscale=False)],
