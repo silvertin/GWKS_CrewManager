@@ -17,6 +17,8 @@
                 <a> 크루 매니저 : {{ crew.manager.name }}</a>
                 <a> 크루 멤버 : {% for member in crew.members.all %} {{ member.name }} {% endfor %}</a>
                 <a> 크루 멤버수 : {{ crew.members.count }} / {{ crew.member_limit }}</a>
+                <a> 크루 소개 사진 :</a>
+                <img src="{{ crew.image }}"></img>
             </div>
         </div>
     </div>
