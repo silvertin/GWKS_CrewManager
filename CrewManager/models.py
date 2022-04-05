@@ -28,7 +28,8 @@ class Crew(models.Model):
     description = RichTextUploadingField('크루 설명',blank=True, null=True)
     create_date = models.DateTimeField('크루 생성날짜', default=timezone.now)
     meeting_type = models.CharField('모임형태',max_length=6, choices=MeetingType.choices, default=MeetingType.ON_OFFLINE)
-    meeting_time = models.CharField('모임시간',max_length=20)
+    meeting_time = models.CharField('모임시간',max_length=30)
+    meeting_limit = models.CharField('모임제한',max_length=30)
     community = models.CharField('크루 소속 공동체',max_length=6, choices=CommunityType.choices, default=CommunityType.FIRST)
 
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='크루매니저', related_name='manager')
