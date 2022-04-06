@@ -38,9 +38,9 @@ class Crew(models.Model):
 
     member_limit = models.PositiveSmallIntegerField("최대 모임 인원 (본인 포함)",default=5, help_text="5~15명 이내로 설정해주세요", validators=[MinValueValidator(5), MaxValueValidator(15)])
     image = ProcessedImageField(verbose_name='크루 소개 이미지 (정사각형)',upload_to='crew/resize/%y%m%d',
-                              processors=[ResizeToFit(width=900,height=900,upscale=False)],
+                              processors=[ResizeToFit(width=500,height=500,upscale=False)],
                               format='JPEG', null=True, blank=True)
-    image_thumbnail = ImageSpecField(source='image', processors=[ResizeToFit(width=300,height=300,upscale=False)],
+    image_thumbnail = ImageSpecField(source='image', processors=[ResizeToFit(width=200,height=200,upscale=False)],
                                                                  format='JPEG',
                                      options={'quality':60})
 
