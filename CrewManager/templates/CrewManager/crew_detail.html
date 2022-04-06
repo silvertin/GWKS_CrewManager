@@ -14,8 +14,22 @@
                 <a> 모임시간 : {{ object.meeting_time }}</a>
                 <a> 모임제한 : {{ object.meeting_limit }}</a>
                 <a> 크루 소속 공동체 : {{ object.community }}</a>
-                <a> 크루 매니저 : {{ crew.manager.name }}</a>
-                <a> 크루 멤버 : {% for member in crew.members.all %} {{ member.name }} {% endfor %}</a>
+                <a> 크루 매니저 :</a>
+                <div class="d-inline-flex position-relative">
+                    {% if crew.manager.profile_image %}
+                        <img class="rounded shadow" src="{{ crew.manager.profile_image }}" alt="Avatar" style="width: 20px; height: 20px;">
+                    {% endif %}
+                        <p class="badge bg-primary">{{ crew.manager.name }}</p>
+                </div>
+                <a> 크루 멤버 : </a>
+                {% for member in crew.members.all %}
+                <div class="d-inline-flex position-relative">
+                {% if member.profile_image %}
+                    <img class="rounded shadow" src="{{ member.profile_image }}" alt="Avatar" style="width: 20px; height: 20px;">
+                {% endif %}
+                    <p class="badge bg-primary">{{ member.name }}</p>
+                </div>
+                {% endfor %}
                 <a> 최대모임인원 (본인 포함) : {{ crew.members.count }} / {{ crew.member_limit }}</a>
                 <a> 크루 소개 사진 :</a>
                 {% if crew.image %}
