@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
+{% block extra-style %}
+<style>
+.cke_wysiwyg_frame{
+  width: 350px!important;
+}
+</style>
 
+{% endblock %}
 {% block content %}
     <h5 class="my-3 border-bottom pb-2">크루 추가/수정</h5>
     <form method="post" class="post-form my-3">

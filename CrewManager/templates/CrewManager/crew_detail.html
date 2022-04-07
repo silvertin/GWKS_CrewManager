@@ -2,48 +2,50 @@
 
 {% block content %}
     {% csrf_token %}
-    <h2 class="border-bottom py-2">크루 정보</h2>
+    <h2 class="border-bottom py-2">{{ object.name }}</h2>
+
     <div class="card my-3">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line">
-                <H1>{{ object.name }}</H1>
-                <H3>{{ object.abstract }}</H3>
+                {% if crew.image %}
+                    <img src="{{ crew.image.url }}" class="shadow rounded" style="width:500px;height:500px"></img>
+                {% endif %}
+                <h4>{{ object.abstract }}</h4>
                 <div class="card" style="width:350px">
                     <div class="card-body">
                         {{ object.description|safe }}
                     </div>
                 </div>
                 <H5>크루 정보</H5>
-                <a> 크루생성날짜 : {{ object.create_date }}</a>
                 <a> 크루모임형태 : {{ object.meeting_type }}</a>
                 <a> 크루모임시간 : {% if object.period %}{{ object.period }} {% endif %}{% if object.weekday %}{{ object.weekday }} {% endif %}{% if object.start_time and object.end_time %} {{ object.start_time }} ~ {{ object.end_time }}{% endif %}</a>
-
-
-                <a> 모임시간 : {{ object.meeting_time }}</a>
-                <a> 모임 요일 : {{ object.weekday }}</a>
+                {% if not object.period %}
+                    <a> 크루모임시간(기타) : {{ object.meeting_time }}</a>
+                {% endif %}
                 <a> 모임제한 : {{ object.meeting_limit }}</a>
-                <a> 크루 소속 공동체 : {{ object.community }}</a>
-                <a> 크루 매니저 :</a>
+                <a> 크루 소속 공동체 : {{ object.get_community_display }}</a>
+                <a> 크루 가입가능 공동체 : {{ object.get_community_limit_display }}</a>
+                <a> 크루 매니저 :
                 <div class="d-inline-flex position-relative">
                     {% if crew.manager.profile_image %}
                         <img class="rounded shadow" src="{{ crew.manager.profile_image }}" alt="Avatar" style="width: 20px; height: 20px;">
                     {% endif %}
                         <p class="badge bg-primary">{{ crew.manager.name }}</p>
                 </div>
-                <a> 크루 멤버 : </a>
-                {% for member in crew.members.all %}
-                <div class="d-inline-flex position-relative">
-                {% if member.profile_image %}
-                    <img class="rounded shadow" src="{{ member.profile_image }}" alt="Avatar" style="width: 20px; height: 20px;">
-                {% endif %}
-                    <p class="badge bg-primary">{{ member.name }}</p>
-                </div>
+                </a>
+                <a> 크루 멤버 :{% for member in crew.members.all %}
+                    <div class="d-inline-flex position-relative">
+                    {% if member.profile_image %}
+                        <img class="rounded shadow" src="{{ member.profile_image }}" alt="Avatar" style="width: 20px; height: 20px;">
+                    {% endif %}
+                        <p class="badge bg-primary">{{ member.name }}</p>
+                    </div>
+                </a>
                 {% endfor %}
                 <a> 최대모임인원 (본인 포함) : {{ crew.members.count }} / {{ crew.member_limit }}</a>
-                <a> 크루 소개 사진 :</a>
-                {% if crew.image %}
-                    <img src="{{ crew.image.url }}"></img>
-                {% endif %}
+                <a> 크루생성날짜 : {{ object.create_date }}</a>
+
+
             </div>
         </div>
     </div>

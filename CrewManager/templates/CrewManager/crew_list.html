@@ -17,7 +17,6 @@
             <th>이름</th>
             <th>크루매니저</th>
             <th>멤버인원현황</th>
-            <th>생성날짜</th>
         </tr>
     </thead>
     <tbody>
@@ -45,9 +44,6 @@
         </td>
         <td>
             {{ crew.members.count }} / {{ crew.member_limit }}
-        </td>
-        <td>
-            {{ crew.create_date }}
         </td>
     </tr>
     {% endfor %}
