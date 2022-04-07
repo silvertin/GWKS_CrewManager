@@ -90,7 +90,7 @@ class Kakao_Login(APIView):
         else:
             User(
                 email=kakao_response['kakao_account']['email'],
-                profile_image=['profile_image']
+                profile_image=kakao_response['kakao_account']['profile']['profile_image_url']
             ).save()
             user = User.objects.get(email=kakao_response['kakao_account']['email'])
             accesstoken, refreshtoken = dj_rest_auth.utils.jwt_encode(user)
