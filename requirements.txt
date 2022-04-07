@@ -16,6 +16,7 @@ django-cors-headers==3.11.0
 django-imagekit==4.1.0
 django-js-asset==2.0.0
 django-jsonform==2.8.1
+django-multiselectfield==0.1.12
 django-rest-auth==0.9.5
 django-zoom-meetings==0.1.0
 djangorestframework==3.13.1

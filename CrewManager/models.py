@@ -9,6 +9,10 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFit
 
+from multiselectfield import MultiSelectField
+
+
+
 # Create your models here.
 class Crew(models.Model):
 
@@ -17,21 +21,46 @@ class Crew(models.Model):
         OFFLINE = '오프라인', _('오프라인')
         ON_OFFLINE = '온/오프라인', _('온/오프라인')
 
-    class CommunityType(models.TextChoices):
-        FIRST = '1청년부', _('1청년부')
-        SECOND = '2청년부', _('2청년부')
-        THIRD = '3청년부', _('3청년부')
-        MARRIED = '신혼브릿지', _('신혼브릿지')
+    # class CommunityType(models.TextChoices):
+    #     FIRST = '1청년부', _('1청년부')
+    #     SECOND = '2청년부', _('2청년부')
+    #     THIRD = '3청년부', _('3청년부')
+    #     MARRIED = '신혼브릿지', _('신혼브릿지')
+
+    class WeekDayType(models.TextChoices):
+        MONDAY = '월요일', _('월요일')
+        TUESDAY = '화요일', _('화요일')
+        WEDNESDAY = '수요일', _('수요일')
+        THURSDAY = '목요일', _('목요일')
+        FRIDAY = '금요일', _('금요일')
+        SATURDAY = '토요일', _('토요일')
+        SUNDAY = '일요일', _('일요일')
+        NODAY = '선택안함', _('선택안함')
+
+    class PeriodType(models.TextChoices):
+        ONEWEEK = '매주', _('매주')
+        TWOWEEK = '격주', _('격주')
+        NOWEEK = '선택안함', _('선택안함')
 
     name = models.CharField('크루명', max_length=30)
-    abstract = models.CharField('크루한줄설명', max_length=100)
+    abstract = models.CharField('크루한줄설명 (30자 이내)', max_length=30)
     description = RichTextUploadingField('크루 설명',blank=True, null=True)
     create_date = models.DateTimeField('크루 생성날짜', default=timezone.now)
     meeting_type = models.CharField('모임형태',max_length=6, choices=MeetingType.choices, default=MeetingType.ON_OFFLINE)
-    meeting_time = models.CharField('모임시간 (30자 이내)',max_length=30)
-    meeting_limit = models.CharField('모임제한 (30자 이내)',max_length=30)
-    community = models.CharField('크루 소속 공동체',max_length=6, choices=CommunityType.choices, default=CommunityType.FIRST)
 
+    meeting_time = models.CharField('기타 모임시간',max_length=30)
+
+    weekday = models.CharField('모임 요일', max_length=4, choices=WeekDayType.choices, default=WeekDayType.NODAY)
+    period = models.CharField('반복 주기', max_length=4, choices=PeriodType.choices, default=PeriodType.NOWEEK)
+    start_time = models.TimeField('시작 시간', blank=True, null=True)
+    end_time = models.TimeField('종료 시간', blank=True, null=True)
+
+
+
+    meeting_limit = models.CharField('모임제한 (30자 이내)',max_length=30)
+    # community = models.CharField('크루 소속 공동체',max_length=6, choices=CommunityType.choices, default=CommunityType.FIRST)
+    community = models.IntegerField('크루 소속 공동체', choices=User.CommunityType.choices, default=User.CommunityType.FIRST)
+    community_limit = MultiSelectField('크루원 참여 공동체 제한',choices=User.CommunityType.choices, null=True, blank=True)
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='크루매니저', related_name='manager')
 
     members = models.ManyToManyField(User,related_name='members')

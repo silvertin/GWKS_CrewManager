@@ -2,6 +2,8 @@ from django import forms
 from accounts.admin import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from .models import User
+from allauth.socialaccount.models import SocialAccount
+import json
 
 
 class CrewUserCreationForm(UserCreationForm):
@@ -29,6 +31,10 @@ class SignupForm(forms.Form):
     community = forms.ChoiceField(label='소속 공동체', choices=User.CommunityType.choices, widget=forms.Select(attrs={'class':'form-control'}))
 
     def signup(self, request, user):
+        if SocialAccount.objects.filter(user=user.id).exists():
+            sa = SocialAccount.objects.filter(user=user.id).get()
+            user.profile_image = sa.extra_data['kakao_account']['profile']['profile_image_url']
+
         user.name = self.cleaned_data['name']
         user.birthyear = self.cleaned_data['birthyear']
         user.community = self.cleaned_data['community']

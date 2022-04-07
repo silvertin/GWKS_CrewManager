@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'imagekit',
     'ckeditor',
     'ckeditor_uploader',
+    'multiselectfield',
 
 
 ]
