@@ -29,6 +29,7 @@ class SignupForm(forms.Form):
     name = forms.CharField(label='이름', widget=forms.TextInput(attrs={'class':'form-control'}))
     birthyear = forms.IntegerField(label='또래', widget=forms.NumberInput(attrs={'class':'form-control'}))
     community = forms.ChoiceField(label='소속 공동체', choices=User.CommunityType.choices, widget=forms.Select(attrs={'class':'form-control'}))
+    nickname = forms.CharField(label='닉네임', widget=forms.TextInput(attrs={'class':'form-control'}))
 
     def signup(self, request, user):
         if SocialAccount.objects.filter(user=user.id).exists():
@@ -38,5 +39,6 @@ class SignupForm(forms.Form):
         user.name = self.cleaned_data['name']
         user.birthyear = self.cleaned_data['birthyear']
         user.community = self.cleaned_data['community']
+        user.nickname = self.cleaned_data['nickname']
         user.save()
         return user

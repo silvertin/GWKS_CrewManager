@@ -34,7 +34,7 @@ class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     class Meta:
         model = User
-        fields = ('email', 'password', 'name', 'is_active', 'is_admin', 'birthyear', 'community','profile_image')
+        fields = ('email', 'password', 'name', 'is_active', 'is_admin', 'birthyear', 'community','profile_image','nickname')
 
 class UserAdmin(BaseUserAdmin):
    # The forms to add and change user instances
@@ -48,7 +48,7 @@ class UserAdmin(BaseUserAdmin):
    list_filter = ('is_admin',)
    fieldsets = (
        (None, {'fields': ('email', 'password')}),
-       ('Personal info', {'fields': ('name', 'birthyear','community', 'profile_image')}),
+       ('Personal info', {'fields': ('name', 'birthyear','community', 'profile_image','nickname')}),
        ('Permissions', {'fields': ('is_admin',)}),
    )
    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -56,7 +56,7 @@ class UserAdmin(BaseUserAdmin):
    add_fieldsets = (
        (None, {
            'classes': ('wide',),
-           'fields': ('email', 'name', 'password1', 'password2', 'birthyear', 'community', 'profile_image'),
+           'fields': ('email', 'name', 'password1', 'password2', 'birthyear', 'community', 'profile_image','nickname'),
        }),
    )
    search_fields = ('email',)

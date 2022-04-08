@@ -45,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
 
     name = models.CharField('이름', max_length=20, null=True, blank=True)
+    nickname = models.CharField('닉네임', max_length=20, null=True, blank=True)
     birthyear = models.PositiveSmallIntegerField('또래', null=True ,validators=[MinValueValidator(0), MaxValueValidator(99)])
     #community = models.CharField('소속 공동체',max_length=6, choices=CommunityType.choices, default=CommunityType.FIRST)
     community = models.IntegerField('소속 공동체', choices=CommunityType.choices, default=CommunityType.FIRST)
