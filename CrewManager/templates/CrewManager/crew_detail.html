@@ -8,7 +8,7 @@
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line">
                 {% if crew.image %}
-                    <img src="{{ crew.image.url }}" class="shadow rounded" style="width:500px;height:500px"></img>
+                    <img src="{{ crew.image.url }}" class="shadow rounded" style="width:350px;height:350px"></img>
                 {% endif %}
                 <h4>{{ object.abstract }}</h4>
                 <div class="card" style="width:350px">
@@ -53,7 +53,11 @@
         <a href="{% url 'crew:delete' pk=object.id %}" class="delete btn btn-sm btn-outline-secondary">삭제</a>
         <a href="{% url 'crew:update' pk=object.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
     {% else %}
-        <a href="{% url 'crew:join' pk=object.id %}" class="btn btn-sm btn-outline-secondary">등록</a>
+        {% if user in crew.members.all %}
+            <a href="{% url 'crew:join' pk=object.id %}" class="btn btn-sm btn-outline-secondary">탈퇴</a>
+        {% else %}
+            <a href="{% url 'crew:join' pk=object.id %}" class="btn btn-sm btn-outline-secondary">등록</a>
+        {% endif %}
     {% endif %}
 {% endblock %}
 

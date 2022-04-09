@@ -42,10 +42,17 @@ class CrewUV(ManagerOnlyMixin,UpdateView):
 
 def CrewJoin(request,pk):
     crew = get_object_or_404(Crew,pk=pk)
-    if request.user in crew.members.all() or crew.members.count() >= crew.member_limit:
+    if crew.members.count() >= crew.member_limit:
         return redirect('crew:detail', pk)
     else:
-        crew.members.add(request.user)
+        if crew.members.filter(id=request.user.id).exists() and crew.manager.id != request.user.id:
+            crew.members.remove(request.user)
+        elif crew.manager.id == request.user.id:
+            pass
+        elif not str(request.user.id) in crew.community_limit:
+            pass
+        else:
+            crew.members.add(request.user)
         return redirect('crew:detail', pk)
 
 
