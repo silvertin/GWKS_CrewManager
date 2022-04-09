@@ -5,6 +5,7 @@ from accounts.views import ManagerOnlyMixin
 
 from CrewManager.models import Crew
 from CrewManager.forms import CrewForm
+
 # Create your views here.
 class CrewLV(ListView):
     model = Crew
@@ -46,4 +47,5 @@ def CrewJoin(request,pk):
     else:
         crew.members.add(request.user)
         return redirect('crew:detail', pk)
+
 

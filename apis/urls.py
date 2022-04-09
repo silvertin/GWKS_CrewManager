@@ -1,6 +1,6 @@
 from django.urls import path, include, re_path
 from django.contrib.auth.decorators import login_required
-from .views import crew_list, crew_detail, user_list, user_detail, Kakao_Login
+from .views import crew_list, crew_detail, user_list, user_detail, Kakao_Login, crew_join
 #from .views import kakao_login, kakao_callback, KakaoLogin
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -12,6 +12,7 @@ app_name = 'apis'
 schema_url_patterns = [
     path('/apis/crew/', crew_list),
     path('/apis/crew/<int:pk>/', crew_detail),
+    path('/apis/crew/<int:pk>/join',crew_join),
     path('/apis/user/', user_list),
     path('/apis/user/<int:pk>/', user_detail),
     path('apis/accounts/',include('dj_rest_auth.urls')),
@@ -32,6 +33,7 @@ schema_view_v1 = get_schema_view(
 urlpatterns = [
     path('crew/', crew_list),
     path('crew/<int:pk>/', crew_detail),
+    path('crew/<int:pk>/join',crew_join),
     path('user/', user_list),
     path('user/<int:pk>/', user_detail),
 

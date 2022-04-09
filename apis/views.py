@@ -23,6 +23,12 @@ from django.conf import settings
 from dj_rest_auth.registration.views import SocialLoginView
 from django.shortcuts import redirect
 from rest_framework import status
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from accounts.models import User
+from CrewManager.models import Crew
+
 # Create your views here.
 
 class CrewViewSet(ModelViewSet):
@@ -119,6 +125,35 @@ class Kakao_Login(APIView):
         #     jwt_token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
         #     return HttpResponse(f'id:{user.id}, name:{user.name}, token:{jwt_token}, exist:false')
         return JsonResponse(kakao_response)
+
+
+
+@api_view(['POST'])
+def crew_join(request,pk):
+    if request.method == 'POST':
+        userid = request.POST['userid']
+        if not User.objects.filter(id=userid).exists():
+            return Response({'error':'user'+userid+' is not in DB'})
+        else:
+            c = Crew.objects.get(id=pk)
+            if c.members.filter(id=userid).exists():
+                if userid == c.manager.id:
+                    return Response({'failed':'crew manager can not be removed'})
+                c.members.remove(userid)
+                return Response({'success':'member remove'})
+            else:
+                u = User.objects.get(id=userid)
+                if str(u.community) in c.community_limit:
+                    c.members.add(userid)
+                    return Response({'success':'member add'})
+
+                else:
+                    return Response({'failed': 'community limit'})
+
+
+        return Response({'error':"test"})
+
+
 
 
 # KAKAO_CALLBACK_URI = 'http://127.0.0.1:8000/apis/accounts/kakao/login/callback/'
