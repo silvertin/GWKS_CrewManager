@@ -138,19 +138,19 @@ def crew_join(request,pk):
             c = Crew.objects.get(id=pk)
             if c.members.filter(id=userid).exists():
                 if userid == c.manager.id:
-                    return Response({'failed':'crew manager can not be removed'})
+                    return Response({'failed':'크루장은 탈퇴할 수 없습니다.'})
                 c.members.remove(userid)
-                return Response({'success':'member remove'})
+                return Response({'success':'정상적으로 크루에 탈퇴하였습니다.'})
             else:
                 u = User.objects.get(id=userid)
+                if c.members.count() >= c.member_limit:
+                    return Response({'failed':'크루 등록인원이 최대치에 도달하여 등록할 수 없습니다.'})
                 if str(u.community) in c.community_limit:
                     c.members.add(userid)
-                    return Response({'success':'member add'})
+                    return Response({'success':'정상적으로 크루에 등록했습니다.'})
 
                 else:
-                    return Response({'failed': 'community limit'})
-
-
+                    return Response({'failed': '크루 공동체 정책에 의해서 등록할 수 없습니다.'})
         return Response({'error':"test"})
 
 
