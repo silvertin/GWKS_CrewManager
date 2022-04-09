@@ -6,6 +6,8 @@ from accounts.views import ManagerOnlyMixin
 from CrewManager.models import Crew
 from CrewManager.forms import CrewForm
 
+from accounts.models import User
+
 # Create your views here.
 class CrewLV(ListView):
     model = Crew
@@ -45,11 +47,12 @@ def CrewJoin(request,pk):
     if crew.members.count() >= crew.member_limit:
         return redirect('crew:detail', pk)
     else:
+        u = User.objects.get(id=request.user.id)
         if crew.members.filter(id=request.user.id).exists() and crew.manager.id != request.user.id:
             crew.members.remove(request.user)
         elif crew.manager.id == request.user.id:
             pass
-        elif not str(request.user.id) in crew.community_limit:
+        elif not str(u.community) in crew.community_limit:
             pass
         else:
             crew.members.add(request.user)
