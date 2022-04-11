@@ -43,6 +43,7 @@
                     </div>
                 </a>
                 {% endfor %}
+                <a href="{{ crew.kakao_room }}">크루 단톡방</a>
                 <a> 최대모임인원 (본인 포함) : {{ crew.members.count }} / {{ crew.member_limit }}</a>
                 <a> 크루생성날짜 : {{ object.create_date }}</a>
 
