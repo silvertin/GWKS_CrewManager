@@ -73,6 +73,9 @@ class Crew(models.Model):
                                                                  format='JPEG',
                                      options={'quality':60})
 
+    kakao_room = models.URLField('오픈카톡방 URL',null=True, blank=True)
+
+
     class Meta:
         ordering = ['-id']
 

@@ -33,7 +33,7 @@ class CrewForm(forms.ModelForm):
         fields = \
             ['name','abstract', 'description', 'meeting_type',
              'community', 'member_limit','meeting_limit','image',
-             'period', 'start_time','end_time','meeting_time'
+             'period', 'start_time','end_time','meeting_time', 'kakao_room'
              ]
         widgets = {
             'name' : forms.TextInput(attrs={'class':'form-control'}),
@@ -43,4 +43,5 @@ class CrewForm(forms.ModelForm):
             'member_limit' : forms.NumberInput(),
             'start_time' : forms.TimeInput(attrs={'class':'form-control'}),
             'end_time' : forms.TimeInput(attrs={'class':'form-control'}),
+            'kakao_room' : forms.URLInput(attrs={'class':'form-control'})
         }
