@@ -12,7 +12,7 @@ from .serializers import CrewSerializer, UserSerializer
 from CrewManager.models import Crew, User
 
 from json.decoder import JSONDecodeError
-from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.models import SocialAccount, providers
 from allauth.socialaccount.providers.kakao import views as kakao_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 import requests
@@ -35,6 +35,16 @@ class CrewViewSet(ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        members_detail = [ UserSerializer(u).data for u in User.objects.filter(id__in = data['members'])]
+        data["members_detail"] = members_detail
+        return Response(data)
+
+
+
 crew_list = CrewViewSet.as_view({
     'get': 'list',
     'post': 'create',
@@ -50,6 +60,15 @@ crew_detail = CrewViewSet.as_view({
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        crews = Crew.objects.filter(members__in=[instance])
+        data['crews'] = [CrewSerializer(c).data for c in crews]
+        return Response(data)
+
 
 user_list = UserViewSet.as_view({
     'get': 'list',
@@ -78,10 +97,23 @@ class Kakao_Login(APIView):
             return HttpResponseBadRequest(content=kakao_response)
         kakao_response = json.loads(kakao_response.text)
         #return JsonResponse(kakao_response)
-        if User.objects.filter(email=kakao_response['kakao_account']['email']).exists():
-            user = User.objects.get(email=kakao_response['kakao_account']['email'])
-            accesstoken, refreshtoken = dj_rest_auth.utils.jwt_encode(user)
+        user_email = kakao_response['kakao_account']['email']
+        profile_image = kakao_response['kakao_account']['profile']['profile_image_url']
+        user = User.objects.filter(email=user_email)
+        if user.exists():
+            user = user.get()
 
+            accesstoken, refreshtoken = dj_rest_auth.utils.jwt_encode(user)
+            if not SocialAccount.objects.filter(user=user).exists():
+                SocialAccount(
+                    user = user,
+                    provider= 'kakao',
+                    uid = kakao_response['id'],
+                    extra_data= kakao_response
+                ).save()
+            if user.profile_image != profile_image:
+                user.profile_image = profile_image
+                user.save()
             info = {"access_token":f"{accesstoken}",
                     "refresh_token":f"{refreshtoken}",
                     "user": {
@@ -95,12 +127,18 @@ class Kakao_Login(APIView):
             return JsonResponse(info)
         else:
             User(
-                email=kakao_response['kakao_account']['email'],
-                profile_image=kakao_response['kakao_account']['profile']['profile_image_url']
+                email=user_email,
+                profile_image=profile_image
             ).save()
-            user = User.objects.get(email=kakao_response['kakao_account']['email'])
+            user = User.objects.get(email=user_email)
             accesstoken, refreshtoken = dj_rest_auth.utils.jwt_encode(user)
-
+            if not SocialAccount.objects.filter(user=user).exists():
+                SocialAccount(
+                    user = user,
+                    provider= 'kakao',
+                    uid = kakao_response['id'],
+                    extra_data= kakao_response
+                ).save()
             info = {"access_token": f"{accesstoken}",
                     "refresh_token": f"{refreshtoken}",
                     "user": {

@@ -13,5 +13,5 @@ class CrewSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id','last_login','email','is_active','name','nickname','birthyear','community','profile_image', 'is_superuser','is_admin']
         ref_name = "User 1"
