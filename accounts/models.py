@@ -48,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     nickname = models.CharField('닉네임', max_length=20, null=True, blank=True)
     birthyear = models.PositiveSmallIntegerField('또래', null=True ,validators=[MinValueValidator(0), MaxValueValidator(99)])
     #community = models.CharField('소속 공동체',max_length=6, choices=CommunityType.choices, default=CommunityType.FIRST)
-    community = models.IntegerField('소속 공동체', choices=CommunityType.choices, default=CommunityType.FIRST)
+    community = models.IntegerField('소속 공동체', choices=CommunityType.choices, default=CommunityType.ETC)
 
     created_date = models.DateTimeField('등록일자', auto_now_add=True)
     updated_date = models.DateTimeField('수정일자', auto_now=True)
