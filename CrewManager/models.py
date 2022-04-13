@@ -59,7 +59,7 @@ class Crew(models.Model):
 
     meeting_limit = models.CharField('모임제한 (특별히 이런 사람들이 왔으면 좋겠다 같은 내용,30자 이내)',max_length=30)
     # community = models.CharField('크루 소속 공동체',max_length=6, choices=CommunityType.choices, default=CommunityType.FIRST)
-    community = models.IntegerField('크루 소속 공동체 (크루리더가 소속된 공동체 = 예산사용공동체)', choices=User.CommunityType.choices, default=User.CommunityType.FIRST)
+    community = models.IntegerField('크루 소속 공동체 (크루리더가 소속된 공동체 = 예산사용공동체)', choices=User.CommunityType.choices, default=User.CommunityType.ETC)
     community_limit = MultiSelectField('크루원 참여 공동체 제한',choices=User.CommunityType.choices, null=True, blank=True)
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='크루매니저', related_name='manager')
 
