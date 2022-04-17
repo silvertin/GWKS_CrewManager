@@ -87,6 +87,10 @@
 </li>
 {% endif %}
 </ul>
+
+    {% if user.is_staff %}
+        <a href="{% url 'crew:data' %}" class="btn btn-sm btn-outline-secondary">크루 데이터 엑셀 다운로드</a>
+    {% endif %}
 {% endblock %}
 
 {% block footer %}

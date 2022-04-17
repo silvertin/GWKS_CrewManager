@@ -1,6 +1,12 @@
+import datetime
+from io import BytesIO
+
+import pandas as pd
+from django.http import StreamingHttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
 from accounts.views import ManagerOnlyMixin
 
 from CrewManager.models import Crew
@@ -58,4 +64,32 @@ def CrewJoin(request,pk):
             crew.members.add(request.user)
         return redirect('crew:detail', pk)
 
+@staff_member_required
+def crewlist_excel_export(request):
+    user = User.objects.all()
 
+    data = []
+
+    for u in user:
+        d = {}
+        d['이름'] = u.name
+        d['소속'] = User.CommunityType.choices[u.community]
+        d['이메일'] = u.email
+        d['참여크루'] = [c.name for c in Crew.objects.filter(members__in=[u])]
+        data.append(d)
+
+    output = BytesIO()
+
+    df = pd.DataFrame(data, columns=['이름', '소속', '이메일','참여크루'])
+
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, sheet_name='Sheet1')
+    writer.save()
+
+    output.seek(0)
+    # workbook = output.getvalue()
+    date = datetime.datetime.now().strftime('%Y-%m-%d')
+    response = StreamingHttpResponse(output,
+                                     content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename=user_data_{date}.xlsx'
+    return response

@@ -27,14 +27,17 @@ inflection==0.5.1
 itypes==1.2.0
 Jinja2==3.1.1
 MarkupSafe==2.1.1
+numpy==1.22.3
 oauthlib==3.2.0
 packaging==21.3
+pandas==1.4.2
 pilkit==2.0
 Pillow==9.0.1
 psycopg2-binary==2.9.3
 pycparser==2.21
 PyJWT==1.7.1
 pyparsing==3.0.7
+python-dateutil==2.8.2
 python3-openid==3.2.0
 pytz==2021.3
 requests==2.27.1
@@ -46,3 +49,4 @@ sqlparse==0.4.2
 uritemplate==4.1.1
 urllib3==1.26.8
 whitenoise==6.0.0
+XlsxWriter==3.0.3

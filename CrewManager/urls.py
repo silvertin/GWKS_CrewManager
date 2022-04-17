@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import CrewLV, CrewDV, CrewCV, CrewDelV, CrewUV, CrewJoin
+from .views import CrewLV, CrewDV, CrewCV, CrewDelV, CrewUV, CrewJoin, crewlist_excel_export
 from django.contrib.auth.decorators import login_required
 
 
@@ -12,5 +12,7 @@ urlpatterns = [
     path('<int:pk>/delete/', login_required(CrewDelV.as_view()), name='delete'),
     path('<int:pk>/update/', login_required(CrewUV.as_view()), name='update'),
     path('<int:pk>/join/', login_required(CrewJoin), name='join'),
+
+    path('data2excel/',crewlist_excel_export, name='data')
 
 ]
